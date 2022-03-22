@@ -1,5 +1,4 @@
 <script>
-import axios from "axios"
 
 import Layout from "../../layouts/auth"
 import {
@@ -65,8 +64,8 @@ export default {
       if (this.$v.$invalid) {
         return
       } else {
-        axios
-          .post('http://localhost:3000/api/' + 'auth/login', {
+        this.$http
+          .post('auth/login', {
             email: this.email,
             password: this.password,
           })

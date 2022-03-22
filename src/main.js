@@ -22,7 +22,19 @@ import i18n from './i18n'
 import { configureFakeBackend } from './helpers/fake-backend';
 
 import tinymce from 'vue-tinymce-editor'
+import axios from 'axios'
 
+/* Axios Config */
+
+const axiosConfig = {
+  baseURL: process.env.APP_ENV == 'prod' ? 'https://infinite-brook-47851.herokuapp.com/api/' : 'http://localhost:3000/api/',
+  timeout: 30000,
+};
+
+
+Vue.prototype.$http = axios.create(axiosConfig)
+
+/* FireBase */
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_APIKEY,
   authDomain: process.env.VUE_APP_AUTHDOMAIN,

@@ -2,7 +2,6 @@
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
 import PageHeader from "@/components/page-header";
-import axios from 'axios';
 
 /**
  * Dashboard Component
@@ -136,7 +135,7 @@ export default {
       });
     } else {
       // eslint-disable-next-line no-console
-      axios.get('http://localhost:3000/api/' + 'admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+      this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
         if(res.data.status === 200 && res.data.body) {
           this.searchs = res.data.body
         }

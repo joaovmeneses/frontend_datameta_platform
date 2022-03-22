@@ -45,7 +45,7 @@ export default {
     },
     submit() {
       const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
-      axios.post('http://localhost:3000/api/' + 'search/', this.search  , { headers }).then((res) => {
+      this.$http.post('search/', this.search  , { headers }).then((res) => {
         if(res.data.status === 200 && res.data.body.id) {
           this.file.searchId = res.data.body.id
           this.file.show = true
