@@ -134,10 +134,14 @@ export default {
         name: "login",
       });
     } else {
-      // eslint-disable-next-line no-console
+      const vm = this
       this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
         if(res.data.status === 200 && res.data.body) {
-          this.searchs = res.data.body
+          vm.searchs = res.data.body
+      // eslint-disable-next-line no-console
+          console.log(this.searchs)
+      // eslint-disable-next-line no-console
+          console.log(res.data.body)
         }
       })
       .catch((err) => {
@@ -170,10 +174,10 @@ export default {
 
               <div class="flex-grow-1 overflow-hidden">
                 <h5 class="text-truncate font-size-14">
-                  <a href="javascript: void(0);" class="text-dark">{{ JSON.parse(grid.requester).name }}</a>
+                  <a href="javascript: void(0);" class="text-dark">{{ grid.requester.name }}</a>
                 </h5>
                 <span class="text-muted mb-4">{{grid.city}}/{{grid.state}}</span><br>
-                <span class="text-muted mb-4" v-if="JSON.parse(grid.requester).politicalParty"> Partido: {{JSON.parse(grid.requester).politicalParty}}</span><br>
+                <span class="text-muted mb-4" v-if="grid.requester.politicalParty"> Partido: {{grid.requester.politicalParty}}</span><br>
                 <div class="avatar-group">
                   <div class="avatar-group-item">
                     <a
