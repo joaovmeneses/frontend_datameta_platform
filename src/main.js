@@ -24,10 +24,12 @@ import { configureFakeBackend } from './helpers/fake-backend';
 import tinymce from 'vue-tinymce-editor'
 import axios from 'axios'
 
+require('dotenv').config()
+
 /* Axios Config */
 
 const axiosConfig = {
-  baseURL: process.env.APP_ENV == 'prod' ? 'https://infinite-brook-47851.herokuapp.com/api/' : 'http://localhost:3000/api/',
+  baseURL: process.env.VUE_APP_URL,
   timeout: 30000,
 };
 
