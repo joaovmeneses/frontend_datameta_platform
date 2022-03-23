@@ -33,6 +33,16 @@ export default [
     component: () => import('./views/account/forgot-password'),
   },
   {
+    path: '/file-manager',
+    name: 'fileManager',
+    component: () => import('./views/file-manager'),
+  },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: () => import('./views/calendar/calendar'),
+  },
+  {
     path: '/logout',
     name: 'logout',
   },

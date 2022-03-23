@@ -13,11 +13,17 @@ export const menuItems = [
     {
         id: 3,
         label: "menuitems.fileManager.text",
-        link: "/",
+        link: "/file-manager",
         icon: 'bxs-file'
     },
     {
         id: 4,
+        label: "menuitems.calendar.text",
+        link: "/calendar",
+        icon: 'bxs-calendar'
+    },
+    {
+        id: 5,
         label: "menuitems.newSearch.text",
         link: "/newSearch",
         icon: 'bx-search-alt'

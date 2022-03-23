@@ -8,12 +8,26 @@ import axios from 'axios';
 
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
+  mounted() {
+    const vm = this
+    const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+    this.$http.get('user/role/2', { headers })
+    .then((res) => {
+      vm.users = res.data
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err)
+      alert("Houve um erro ao tentar resgatar os usuarios!")
+    })
+  },
   data() {
     return {
       title: "Nova Pesquisa",
+      users: [],
       search: {
           requester: {
-            id: 99,
+            id: 0,
             name: '',
             politicalParty: ''
           },
@@ -40,12 +54,21 @@ export default {
     }
   },
   methods: {
-    uploadFile() {
-      
+    addZeroIfNeed(element) {
+      if(element < 9) {
+        return `0${element}`
+      } else {
+        return element
+      }
     },
-    submit() {
+    async adjustDate(date) {
+      return `${this.addZeroIfNeed(await date.getDate())}/${this.addZeroIfNeed(await date.getMonth() + 1)}/${await date.getFullYear()}`
+    },
+    async submit() {
       const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
-      axios.post('http://localhost:3000/api/' + 'search/', this.search  , { headers }).then((res) => {
+      this.search.startDate = await this.adjustDate(this.search.startDate)
+      this.search.endDate = await this.adjustDate(this.search.endDate)
+      this.$http.post('search/', this.search  , { headers }).then((res) => {
         if(res.data.status === 200 && res.data.body.id) {
           this.file.searchId = res.data.body.id
           this.file.show = true
@@ -147,14 +170,14 @@ export default {
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Inicial</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.startDate" :first-day-of-week="1" lang="en"></date-picker>
+                  <date-picker v-model="search.startDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Final</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.endDate" :first-day-of-week="1" lang="en"></date-picker>
+                  <date-picker v-model="search.endDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
@@ -222,7 +245,6 @@ export default {
                   ref="myVueDropzone"
                   :use-custom-slot="true"
                   :options="dropzoneOptions"
-                  @change="uploadFile"
                 >
                   <div class="dropzone-custom-content">
                     <i class="display-4 text-muted bx bxs-cloud-upload"></i>
