@@ -138,10 +138,6 @@ export default {
       this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
         if(res.data.status === 200 && res.data.body) {
           vm.searchs = res.data.body
-      // eslint-disable-next-line no-console
-          console.log(this.searchs)
-      // eslint-disable-next-line no-console
-          console.log(res.data.body)
         }
       })
       .catch((err) => {

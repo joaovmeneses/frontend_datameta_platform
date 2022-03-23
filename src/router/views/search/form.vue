@@ -40,11 +40,20 @@ export default {
     }
   },
   methods: {
-    uploadFile() {
-      
+    addZeroIfNeed(element) {
+      if(element < 9) {
+        return `0${element}`
+      } else {
+        return element
+      }
     },
-    submit() {
+    async adjustDate(date) {
+      return `${this.addZeroIfNeed(await date.getDate())}/${this.addZeroIfNeed(await date.getMonth() + 1)}/${await date.getFullYear()}`
+    },
+    async submit() {
       const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+      this.search.startDate = await this.adjustDate(this.search.startDate)
+      this.search.endDate = await this.adjustDate(this.search.endDate)
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         if(res.data.status === 200 && res.data.body.id) {
           this.file.searchId = res.data.body.id
@@ -147,14 +156,14 @@ export default {
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Inicial</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.startDate" :first-day-of-week="1" lang="en"></date-picker>
+                  <date-picker v-model="search.startDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Final</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.endDate" :first-day-of-week="1" lang="en"></date-picker>
+                  <date-picker v-model="search.endDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
@@ -222,7 +231,6 @@ export default {
                   ref="myVueDropzone"
                   :use-custom-slot="true"
                   :options="dropzoneOptions"
-                  @change="uploadFile"
                 >
                   <div class="dropzone-custom-content">
                     <i class="display-4 text-muted bx bxs-cloud-upload"></i>
