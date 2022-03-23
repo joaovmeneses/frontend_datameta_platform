@@ -38,6 +38,11 @@ export default [
     component: () => import('./views/file-manager'),
   },
   {
+    path: '/calendar',
+    name: 'calendar',
+    component: () => import('./views/calendar/calendar'),
+  },
+  {
     path: '/logout',
     name: 'logout',
   },

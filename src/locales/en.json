@@ -105,6 +105,9 @@
     },
     "newSearch": {
       "text": "Nova Pesquisa"
+    },
+    "calendar": {
+      "text": "Calendario"
     }
 
   }
