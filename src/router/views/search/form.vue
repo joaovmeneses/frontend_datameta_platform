@@ -80,7 +80,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.$refs.myVueDropzone.dropzone.files[0])
       const headers = { 'Content-Type': 'multipart/form-data', 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
-      axios.put('http://localhost:3000/api/' + `search/${this.file.searchId}/result`, formData  , { headers }).then((res) => {
+      axios.put(`search/${this.file.searchId}/result`, formData  , { headers }).then((res) => {
         // eslint-disable-next-line no-console
         console.log(res.data)
       })
