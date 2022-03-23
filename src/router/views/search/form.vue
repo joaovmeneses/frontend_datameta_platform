@@ -8,12 +8,26 @@ import axios from 'axios';
 
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
+  mounted() {
+    const vm = this
+    const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+    this.$http.get('user/role/2', { headers })
+    .then((res) => {
+      vm.users = res.data
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err)
+      alert("Houve um erro ao tentar resgatar os usuarios!")
+    })
+  },
   data() {
     return {
       title: "Nova Pesquisa",
+      users: [],
       search: {
           requester: {
-            id: 99,
+            id: 0,
             name: '',
             politicalParty: ''
           },

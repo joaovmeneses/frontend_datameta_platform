@@ -13,7 +13,7 @@ export const menuItems = [
     {
         id: 3,
         label: "menuitems.fileManager.text",
-        link: "/",
+        link: "/file-manager",
         icon: 'bxs-file'
     },
     {
