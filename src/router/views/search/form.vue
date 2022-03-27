@@ -4,7 +4,6 @@ import DatePicker from "vue2-datepicker";
 
 import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
-import axios from 'axios';
 
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
@@ -25,6 +24,7 @@ export default {
     return {
       title: "Nova Pesquisa",
       users: [],
+      block: false,
       search: {
           requester: {
             id: 0,
@@ -66,11 +66,13 @@ export default {
     },
     async submit() {
       const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+      const vm = this
       this.search.startDate = await this.adjustDate(this.search.startDate)
       this.search.endDate = await this.adjustDate(this.search.endDate)
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         if(res.data.status === 200 && res.data.body.id) {
           this.file.searchId = res.data.body.id
+          vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
         }
@@ -81,8 +83,18 @@ export default {
       formData.append('file', this.$refs.myVueDropzone.dropzone.files[0])
       const headers = { 'Content-Type': 'multipart/form-data', 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
       this.$http.put(`search/${this.file.searchId}/result`, formData  , { headers }).then((res) => {
+        if(res.data.status === 200 && res.data.body === 1) {
+          alert("Resultado enviado com sucesso! Voce sera redirecionado.")
+          this.$router.push({
+            name: 'dashboard'
+          })
+        } else {
+          alert('Houve um erro no servidor!')
+        }
+      }).catch((err) => {
         // eslint-disable-next-line no-console
-        console.log(res.data)
+        console.log(err)
+        alert('Houve um erro!')
       })
     }
   }
@@ -104,6 +116,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.requester.name"
                     type="text"
@@ -118,6 +131,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.requester.politicalParty"
                     type="text"
@@ -132,6 +146,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <textarea
+                    :disabled="block"
                     id="projectdesc"
                     class="form-control"
                     rows="3"
@@ -145,6 +160,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.state"
                     type="text"
@@ -159,6 +175,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.city"
                     type="text"
@@ -170,14 +187,14 @@ export default {
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Inicial</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.startDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
+                  <date-picker :disabled="block" v-model="search.startDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
               <div class="form-group row mb-4">
                 <label class="col-form-label col-lg-2">Data Final</label>
                 <div class="col-lg-10">
-                  <date-picker v-model="search.endDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
+                  <date-picker :disabled="block" v-model="search.endDate" format="DD/MM/YYYY" :first-day-of-week="1" lang="pt"></date-picker>
                 </div>
               </div>
 
@@ -187,6 +204,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.methodology"
                     type="text"
@@ -202,6 +220,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <input
+                    :disabled="block"
                     id="projectname"
                     v-model="search.searchType"
                     type="text"
@@ -218,6 +237,7 @@ export default {
                 <div class="col-lg-10">
                   Sim <br>
                   <input
+                    :disabled="block"
                     type="checkbox"
                     v-model="search.registed"
                     @change="test()"
@@ -227,7 +247,7 @@ export default {
             </form>
             <div class="row justify-content-end">
               <div class="col-lg-10">
-                <button @click="submit()" class="btn btn-primary">
+                <button @click="submit()" class="btn btn-primary" :disabled="block">
                   Concluir Pesquisa
                 </button>
               </div>
