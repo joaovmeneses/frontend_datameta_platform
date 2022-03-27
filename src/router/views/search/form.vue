@@ -25,6 +25,7 @@ export default {
       title: "Nova Pesquisa",
       users: [],
       block: false,
+      loading: false,
       search: {
           requester: {
             id: 0,
@@ -43,7 +44,8 @@ export default {
       file: {
         searchId: '',
         data: null,
-        show: false
+        show: false,
+        loading: false
       },
       dropzoneOptions: {
         url: "https://httpbin.org/post",
@@ -66,10 +68,12 @@ export default {
     },
     async submit() {
       const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+      this.loading = true
       const vm = this
       this.search.startDate = await this.adjustDate(this.search.startDate)
       this.search.endDate = await this.adjustDate(this.search.endDate)
       this.$http.post('search/', this.search  , { headers }).then((res) => {
+        vm.loading = false
         if(res.data.status === 200 && res.data.body.id) {
           this.file.searchId = res.data.body.id
           vm.block = true
@@ -79,6 +83,8 @@ export default {
       })
     },
     submitResult() {
+      this.file.loading = true
+      const vm = this
       const formData = new FormData()
       formData.append('file', this.$refs.myVueDropzone.dropzone.files[0])
       const headers = { 'Content-Type': 'multipart/form-data', 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
@@ -91,10 +97,12 @@ export default {
         } else {
           alert('Houve um erro no servidor!')
         }
+        vm.file.loading = false
       }).catch((err) => {
         // eslint-disable-next-line no-console
         console.log(err)
         alert('Houve um erro!')
+        vm.file.loading = false
       })
     }
   }
@@ -247,8 +255,12 @@ export default {
             </form>
             <div class="row justify-content-end">
               <div class="col-lg-10">
-                <button @click="submit()" class="btn btn-primary" :disabled="block">
-                  Concluir Pesquisa
+                <button @click="submit()" class="btn btn-primary" :disabled="block || loading">
+                  <div v-if='loading' class="spinner-border" role="status">
+                  </div>
+                  <div v-else>
+                    Concluir Pesquisa
+                  </div>
                 </button>
               </div>
             </div>
@@ -276,7 +288,12 @@ export default {
               <div class="col-lg-10">
               <br>
                 <button @click="submitResult()" class="btn btn-primary">
-                  Enviar Resultado
+                  <div v-if='file.loading'  class="spinner-border" role="status">
+                  </div>
+                  <div v-else>
+                    Enviar Resultado
+                  </div>
+
                 </button>
               </div>
             </div>
