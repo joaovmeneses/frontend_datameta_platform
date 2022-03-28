@@ -12,7 +12,7 @@ export default {
     const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
     this.$http.get('user/role/2', { headers })
     .then((res) => {
-      vm.users = res.data
+      vm.users = res.data.body
     })
     .catch((err) => {
       // eslint-disable-next-line no-console
@@ -26,12 +26,9 @@ export default {
       users: [],
       block: false,
       loading: false,
+      userSelected: {},
       search: {
-          requester: {
-            id: 0,
-            name: '',
-            politicalParty: ''
-          },
+          requester: {},
           description: '',
           city: '',
           state: '',
@@ -120,32 +117,14 @@ export default {
             <form>
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"
-                  >Nome do Usuario</label
+                  >Solicitante</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.requester.name"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
-                </div>
-              </div>
-              <div class="form-group row mb-4">
-                <label for="projectname" class="col-form-label col-lg-2"
-                  >Partido</label
-                >
-                <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.requester.politicalParty"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
+                  <select class="form-control" v-model="search.requester" >
+                    <option v-for='user in users' :value="user" :key='user.id'>
+                      {{user.name}} | {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}}
+                    </option>
+                  </select>
                 </div>
               </div>
               <div class="form-group row mb-4">
