@@ -71,7 +71,8 @@ export default {
           })
           .then( async (res) => {
             if(res.data.body && res.data.status === 200) {
-              await sessionStorage.setItem('userToken', res.data.body)
+              await sessionStorage.setItem('userToken', res.data.body.session)
+              await sessionStorage.setItem('userRole', res.data.body.user.Role.name)
               this.$router.push({
                 name: "default",
               })

@@ -1,4 +1,4 @@
-export const menuItems = [
+export const menuItemsAdmin = [
     {
         id: 1,
         label: "menuitems.menu.text",
@@ -13,14 +13,20 @@ export const menuItems = [
     {
         id: 3,
         label: "menuitems.fileManager.text",
-        link: "/file-manager",
+        link: "admin/file-manager",
         icon: 'bxs-file'
     },
     {
         id: 4,
         label: "menuitems.calendar.text",
-        link: "/calendar",
+        link: "admin/calendar",
         icon: 'bxs-calendar'
-    }
+    },
+    {
+        id: 5,
+        label: "menuitems.newSearch.text",
+        link: "admin/newSearch",
+        icon: 'bx-search-alt'
+    },
 ];
 

@@ -8,7 +8,7 @@ import PageHeader from "@/components/page-header";
  */
 export default {
   page: {
-    title: "Admin Dashboard",
+    title: "Dashboard",
     meta: [
       {
         name: "description",
@@ -22,10 +22,10 @@ export default {
   },
   data() {
     return {
-      title: "Admin Dashboard",
+      title: "Dashboard",
       items: [
         {
-          text: "Admin Dashboard",
+          text: "Dashboard",
           href: "/",
         },
         {
@@ -129,6 +129,8 @@ export default {
     }
   },
   mounted() {
+    // eslint-disable-next-line no-console
+    console.log(sessionStorage.getItem('userRole'))
     if(!sessionStorage.getItem('userToken')) {
       this.$router.push({
         name: "login",
