@@ -249,6 +249,7 @@ export default {
       scrollable
       title="Informacoes da Pesquisa"
       title-class="font-18"
+      size="lg"
     >
       <p>Descricao: {{modalInfo.description}}</p>
       <p>Localizacao: {{modalInfo.city}}/{{modalInfo.state}}</p>
@@ -257,18 +258,26 @@ export default {
       <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
       <hr>
       <h4>Questoes: </h4>
-      <div v-for="question in modalInfo.questions" :key="question.id">
-        <div v-for="(element, idx) in question" :key="element.id">
-          <div v-if="idx === 0">
-            <h6>{{element.index}} - {{element.value}}</h6>
+      <b-tabs content-class="p-3 text-muted">
+        <b-tab v-for="question in modalInfo.questions" :key="question.id">
+          <template v-slot:title>
+            <span class="d-inline-block d-sm-none">
+              <i class="fas fa-home"></i>
+            </span>
+            <span class="d-none d-sm-inline-block">{{question[0].value}}</span>
+          </template>
+          <div v-for="(element, idx) in question" :key="element.id">
+            <div v-if="idx === 0">
+              <h6>{{element.index}} - {{element.value}}</h6>
+            </div>
+            <div v-else>
+              <p>{{element.index}}</p>
+              <p>{{element.value}}</p>
+            </div>
+            <hr>
           </div>
-          <div v-else>
-            <p>{{element.index}}</p>
-            <p>{{element.value}}</p>
-          </div>
-          <hr>
-        </div>
-      </div>
+        </b-tab>
+      </b-tabs>
     </b-modal>
   </Layout>
   
