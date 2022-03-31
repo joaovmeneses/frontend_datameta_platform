@@ -8,7 +8,7 @@ import PageHeader from "@/components/page-header";
  */
 export default {
   page: {
-    title: "Admin Dashboard",
+    title: "Dashboard",
     meta: [
       {
         name: "description",
@@ -22,10 +22,11 @@ export default {
   },
   data() {
     return {
-      title: "Admin Dashboard",
+      modalInfo: {},
+      title: "Dashboard",
       items: [
         {
-          text: "Admin Dashboard",
+          text: "Dashboard",
           href: "/",
         },
         {
@@ -107,7 +108,6 @@ export default {
         },
       ],
       searchs: [],
-      showModal: false,
       isLoading: false,
       fullPage: true,
       canCancel: false,
@@ -123,10 +123,19 @@ export default {
     };
   },
   methods: {
-    showMore(object) {
-      // eslint-disable-next-line no-console
-      console.log(object)
-    }
+    showMore(search, questionsId) {
+      const vm = this
+      this.modalInfo = {...search, questions: []}
+      this.$http.get(`search/${search.id}/questions/${questionsId}`, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+        if(res.data.status === 200 && res.data.body) {
+          vm.modalInfo.questions = res.data.body.questions
+        }
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      })
+    },
   },
   mounted() {
     if(!sessionStorage.getItem('userToken')) {
@@ -135,19 +144,30 @@ export default {
       });
     } else {
       const vm = this
-      this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
-        if(res.data.status === 200 && res.data.body) {
-          vm.searchs = res.data.body
-        }
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err)
-      })
-    }
-    setTimeout(() => {
-      this.showModal = true;
-    }, 1500);
+      if(sessionStorage.getItem('userRole') === 'Admin') {
+        this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+            if(res.data.status === 200 && res.data.body) {
+              vm.searchs = res.data.body
+            // eslint-disable-next-line no-console
+              console.log(vm.searchs)
+            }
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.log(err)
+          })
+      } else {
+        this.$http.get('/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+            if(res.data.status === 200 && res.data.body) {
+              vm.searchs = res.data.body
+            }
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.log(err)
+          })
+      }
+     }
   },
 };
 </script>
@@ -170,10 +190,10 @@ export default {
 
               <div class="flex-grow-1 overflow-hidden">
                 <h5 class="text-truncate font-size-14">
-                  <a href="javascript: void(0);" class="text-dark">{{ grid.requester.name }}</a>
+                  <a v-if="grid.UserRequester" href="javascript: void(0);" class="text-dark">{{ grid.UserRequester.name }}</a>
+                  <a v-else href="javascript: void(0);" class="text-dark">{{ grid.description.substr(0, 50) }}...</a>
                 </h5>
                 <span class="text-muted mb-4">{{grid.city}}/{{grid.state}}</span><br>
-                <span class="text-muted mb-4" v-if="grid.requester.politicalParty"> Partido: {{grid.requester.politicalParty}}</span><br>
                 <div class="avatar-group">
                   <div class="avatar-group-item">
                     <a
@@ -215,7 +235,7 @@ export default {
                 class="list-inline-item me-3"
                 title="Comments"
               >
-                <span @click="showMore(grid)">Mais...</span>
+                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(grid, grid.searchMongoId)">Mais...</button>
                 
               </li>
             </ul>
@@ -223,5 +243,42 @@ export default {
         </div>
       </div>
     </div>
+    <!-- M O D A L -->
+    <b-modal
+      id="modal-scrollable"
+      scrollable
+      title="Informacoes da Pesquisa"
+      title-class="font-18"
+      size="lg"
+    >
+      <p>Descricao: {{modalInfo.description}}</p>
+      <p>Localizacao: {{modalInfo.city}}/{{modalInfo.state}}</p>
+      <p>Periodo: {{modalInfo.startDate}} - {{modalInfo.endDate}}</p>
+      <p>Metodologia: {{modalInfo.methodology}}</p>
+      <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
+      <hr>
+      <h4>Questoes: </h4>
+      <b-tabs content-class="p-3 text-muted">
+        <b-tab v-for="question in modalInfo.questions" :key="question.id">
+          <template v-slot:title>
+            <span class="d-inline-block d-sm-none">
+              <i class="fas fa-home"></i>
+            </span>
+            <span class="d-none d-sm-inline-block">{{question[0].value}}</span>
+          </template>
+          <div v-for="(element, idx) in question" :key="element.id">
+            <div v-if="idx === 0">
+              <h6>{{element.index}} - {{element.value}}</h6>
+            </div>
+            <div v-else>
+              <p>{{element.index}}</p>
+              <p>{{element.value}}</p>
+            </div>
+            <hr>
+          </div>
+        </b-tab>
+      </b-tabs>
+    </b-modal>
   </Layout>
+  
 </template>

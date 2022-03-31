@@ -12,7 +12,7 @@ export default {
     const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
     this.$http.get('user/role/2', { headers })
     .then((res) => {
-      vm.users = res.data
+      vm.users = res.data.body
     })
     .catch((err) => {
       // eslint-disable-next-line no-console
@@ -26,20 +26,18 @@ export default {
       users: [],
       block: false,
       loading: false,
+      userSelected: {},
       search: {
-          requester: {
-            id: 0,
-            name: '',
-            politicalParty: ''
-          },
-          description: '',
-          city: '',
-          state: '',
-          startDate: '',
-          endDate: '',
-          methodology: '',
-          searchType: '',
-          registed: false,
+        description: '',
+        methodology: '',
+        searchType: '',
+        registred: false,
+        city: '',
+        state: '',
+        startDate: '',
+        endDate: '',
+        searchMongoId: null,
+        userRequesterId: 2,
       },
       file: {
         searchId: '',
@@ -75,7 +73,7 @@ export default {
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         vm.loading = false
         if(res.data.status === 200 && res.data.body.id) {
-          this.file.searchId = res.data.body.id
+          this.file.searchId = res.data.body.searchMongoId
           vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
@@ -92,7 +90,7 @@ export default {
         if(res.data.status === 200 && res.data.body === 1) {
           alert("Resultado enviado com sucesso! Voce sera redirecionado.")
           this.$router.push({
-            name: 'dashboard'
+            name: 'default'
           })
         } else {
           alert('Houve um erro no servidor!')
@@ -120,32 +118,14 @@ export default {
             <form>
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"
-                  >Nome do Usuario</label
+                  >Solicitante</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.requester.name"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
-                </div>
-              </div>
-              <div class="form-group row mb-4">
-                <label for="projectname" class="col-form-label col-lg-2"
-                  >Partido</label
-                >
-                <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.requester.politicalParty"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
+                  <select class="form-control" v-model="search.userRequesterId" >
+                    <option v-for='user in users' :value="user.id" :key='user.id'>
+                      {{user.name}} | {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}}
+                    </option>
+                  </select>
                 </div>
               </div>
               <div class="form-group row mb-4">

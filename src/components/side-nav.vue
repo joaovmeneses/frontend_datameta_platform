@@ -1,17 +1,23 @@
 <script>
 import MetisMenu from "metismenujs/dist/metismenujs";
 
+const userRole = sessionStorage.getItem("userRole");
+
 import {
     menuItems
 } from "./menu";
 
+import {
+    menuItemsAdmin
+} from "./menu-admin";
+
 /**
  * Sidenav component
- */
+ */ 
 export default {
     data() {
         return {
-            menuItems: menuItems,
+            menuItems: userRole === 'Admin' ? menuItemsAdmin : menuItems,
             menuData: null,
         };
     },

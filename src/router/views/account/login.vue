@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       email: "",
       password: "",
       submitted: false,
@@ -64,6 +65,8 @@ export default {
       if (this.$v.$invalid) {
         return
       } else {
+        this.loading = true
+        const vm = this
         this.$http
           .post('auth/login', {
             email: this.email,
@@ -71,10 +74,14 @@ export default {
           })
           .then( async (res) => {
             if(res.data.body && res.data.status === 200) {
-              await sessionStorage.setItem('userToken', res.data.body)
+              await sessionStorage.setItem('userToken', res.data.body.session)
+              await sessionStorage.setItem('userRole', res.data.body.user.Role.name)
               this.$router.push({
                 name: "default",
               })
+            } else {
+              alert("Login failed")
+              vm.loading = false
             }
           })
       }
@@ -183,9 +190,12 @@ export default {
                   Remember me
                 </b-form-checkbox>
               <div class="mt-3 d-grid">
-                <b-button type="submit" variant="primary" class="btn-block"
-                  >Log In</b-button
-                >
+                
+                <b-button type="submit" variant="primary" class="btn-block">
+                  <div v-if='loading' class="spinner-border" role="status">
+                  </div>
+                  <span v-else>Sign In</span>
+                </b-button>
               </div>
               <div class="mt-4 text-center">
                 <h5 class="font-size-14 mb-3">Sign in with</h5>
