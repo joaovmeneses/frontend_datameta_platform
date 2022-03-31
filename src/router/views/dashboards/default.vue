@@ -258,26 +258,28 @@ export default {
       <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
       <hr>
       <h4>Questoes: </h4>
-      <b-tabs content-class="p-3 text-muted">
-        <b-tab v-for="question in modalInfo.questions" :key="question.id">
-          <template v-slot:title>
-            <span class="d-inline-block d-sm-none">
-              <i class="fas fa-home"></i>
-            </span>
-            <span class="d-none d-sm-inline-block">{{question[0].value}}</span>
-          </template>
-          <div v-for="(element, idx) in question" :key="element.id">
-            <div v-if="idx === 0">
-              <h6>{{element.index}} - {{element.value}}</h6>
+      <br><br>
+      <b-card no-body class="mb-1 shadow-none" v-for="(question, idx) in modalInfo.questions" :key="question.id">
+        <b-card-header header-tag="header" role="tab">
+          <h6 class="m-0">
+            <a
+              v-b-toggle="'accordion-' + idx"
+              class="text-dark"
+              href="javascript: void(0);"
+            >{{question[0].value}}</a>
+          </h6>
+        </b-card-header>
+        <b-collapse :id="'accordion-' + idx" visible accordion="my-accordion" role="tabpanel">
+          <b-card-body>
+            <div v-for="(element, idx) in question" :key="element.id">
+              <div v-if="idx > 0">
+                <b-card-text>{{element.index}} - <b>{{element.value}}</b></b-card-text>
+              </div>
+              <hr>
             </div>
-            <div v-else>
-              <p>{{element.index}}</p>
-              <p>{{element.value}}</p>
-            </div>
-            <hr>
-          </div>
-        </b-tab>
-      </b-tabs>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
     </b-modal>
   </Layout>
   
