@@ -13,19 +13,19 @@ export const menuItemsAdmin = [
     {
         id: 3,
         label: "menuitems.fileManager.text",
-        link: "admin/file-manager",
+        link: "/file-manager",
         icon: 'bxs-file'
     },
     {
         id: 4,
         label: "menuitems.calendar.text",
-        link: "admin/calendar",
+        link: "/calendar",
         icon: 'bxs-calendar'
     },
     {
         id: 5,
         label: "menuitems.newSearch.text",
-        link: "admin/newSearch",
+        link: "/newSearch",
         icon: 'bx-search-alt'
     },
 ];

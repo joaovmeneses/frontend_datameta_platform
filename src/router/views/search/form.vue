@@ -28,15 +28,16 @@ export default {
       loading: false,
       userSelected: {},
       search: {
-          requester: {},
-          description: '',
-          city: '',
-          state: '',
-          startDate: '',
-          endDate: '',
-          methodology: '',
-          searchType: '',
-          registed: false,
+        description: '',
+        methodology: '',
+        searchType: '',
+        registred: false,
+        city: '',
+        state: '',
+        startDate: '',
+        endDate: '',
+        searchMongoId: null,
+        userRequesterId: 2,
       },
       file: {
         searchId: '',
@@ -72,7 +73,7 @@ export default {
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         vm.loading = false
         if(res.data.status === 200 && res.data.body.id) {
-          this.file.searchId = res.data.body.id
+          this.file.searchId = res.data.body.searchMongoId
           vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
@@ -89,7 +90,7 @@ export default {
         if(res.data.status === 200 && res.data.body === 1) {
           alert("Resultado enviado com sucesso! Voce sera redirecionado.")
           this.$router.push({
-            name: 'dashboard'
+            name: 'default'
           })
         } else {
           alert('Houve um erro no servidor!')
@@ -120,8 +121,8 @@ export default {
                   >Solicitante</label
                 >
                 <div class="col-lg-10">
-                  <select class="form-control" v-model="search.requester" >
-                    <option v-for='user in users' :value="user" :key='user.id'>
+                  <select class="form-control" v-model="search.userRequesterId" >
+                    <option v-for='user in users' :value="user.id" :key='user.id'>
                       {{user.name}} | {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}}
                     </option>
                   </select>

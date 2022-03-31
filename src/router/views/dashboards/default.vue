@@ -129,24 +129,36 @@ export default {
     }
   },
   mounted() {
-    // eslint-disable-next-line no-console
-    console.log(sessionStorage.getItem('userRole'))
     if(!sessionStorage.getItem('userToken')) {
       this.$router.push({
         name: "login",
       });
     } else {
       const vm = this
-      this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
-        if(res.data.status === 200 && res.data.body) {
-          vm.searchs = res.data.body
-        }
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err)
-      })
-    }
+      if(sessionStorage.getItem('userRole') === 'Admin') {
+        this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+            if(res.data.status === 200 && res.data.body) {
+              vm.searchs = res.data.body
+            // eslint-disable-next-line no-console
+              console.log(vm.searchs)
+            }
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.log(err)
+          })
+      } else {
+        this.$http.get('/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+            if(res.data.status === 200 && res.data.body) {
+              vm.searchs = res.data.body
+            }
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.log(err)
+          })
+      }
+     }
     setTimeout(() => {
       this.showModal = true;
     }, 1500);
@@ -172,10 +184,10 @@ export default {
 
               <div class="flex-grow-1 overflow-hidden">
                 <h5 class="text-truncate font-size-14">
-                  <a href="javascript: void(0);" class="text-dark">{{ grid.requester.name }}</a>
+                  <a v-if="grid.UserRequester" href="javascript: void(0);" class="text-dark">{{ grid.UserRequester.name }}</a>
+                  <a v-else href="javascript: void(0);" class="text-dark">{{ grid.description.substr(0, 50) }}...</a>
                 </h5>
                 <span class="text-muted mb-4">{{grid.city}}/{{grid.state}}</span><br>
-                <span class="text-muted mb-4" v-if="grid.requester.politicalParty"> Partido: {{grid.requester.politicalParty}}</span><br>
                 <div class="avatar-group">
                   <div class="avatar-group-item">
                     <a
