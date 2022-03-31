@@ -22,6 +22,7 @@ export default {
   },
   data() {
     return {
+      modalInfo: {},
       title: "Dashboard",
       items: [
         {
@@ -107,7 +108,6 @@ export default {
         },
       ],
       searchs: [],
-      showModal: false,
       isLoading: false,
       fullPage: true,
       canCancel: false,
@@ -124,9 +124,8 @@ export default {
   },
   methods: {
     showMore(object) {
-      // eslint-disable-next-line no-console
-      console.log(object)
-    }
+      this.modalInfo = object
+    },
   },
   mounted() {
     if(!sessionStorage.getItem('userToken')) {
@@ -159,9 +158,6 @@ export default {
           })
       }
      }
-    setTimeout(() => {
-      this.showModal = true;
-    }, 1500);
   },
 };
 </script>
@@ -229,7 +225,7 @@ export default {
                 class="list-inline-item me-3"
                 title="Comments"
               >
-                <span @click="showMore(grid)">Mais...</span>
+                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(grid)">Mais...</button>
                 
               </li>
             </ul>
@@ -237,5 +233,20 @@ export default {
         </div>
       </div>
     </div>
+    <!-- M O D A L -->
+    <b-modal
+      id="modal-scrollable"
+      scrollable
+      title="Scrollable Modal"
+      title-class="font-18"
+    >
+      <p>Descricao: {{modalInfo.description}}</p>
+      <p>Localizacao: {{modalInfo.city}}/{{modalInfo.state}}</p>
+      <p>Periodo: {{modalInfo.startDate}} - {{modalInfo.endDate}}</p>
+      <p>Metodologia: {{modalInfo.methodology}}</p>
+      <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
+      <p>Questoes: </p>
+    </b-modal>
   </Layout>
+  
 </template>
