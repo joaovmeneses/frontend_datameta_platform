@@ -123,8 +123,18 @@ export default {
     };
   },
   methods: {
-    showMore(object) {
-      this.modalInfo = object
+    showMore(search, questionsId) {
+      const vm = this
+      this.modalInfo = {...search, questions: []}
+      this.$http.get(`search/${search.id}/questions/${questionsId}`, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
+        if(res.data.status === 200 && res.data.body) {
+          vm.modalInfo.questions = res.data.body.questions
+        }
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err)
+      })
     },
   },
   mounted() {
@@ -225,7 +235,7 @@ export default {
                 class="list-inline-item me-3"
                 title="Comments"
               >
-                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(grid)">Mais...</button>
+                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(grid, grid.searchMongoId)">Mais...</button>
                 
               </li>
             </ul>
@@ -237,7 +247,7 @@ export default {
     <b-modal
       id="modal-scrollable"
       scrollable
-      title="Scrollable Modal"
+      title="Informacoes da Pesquisa"
       title-class="font-18"
     >
       <p>Descricao: {{modalInfo.description}}</p>
@@ -245,7 +255,20 @@ export default {
       <p>Periodo: {{modalInfo.startDate}} - {{modalInfo.endDate}}</p>
       <p>Metodologia: {{modalInfo.methodology}}</p>
       <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
-      <p>Questoes: </p>
+      <hr>
+      <h4>Questoes: </h4>
+      <div v-for="question in modalInfo.questions" :key="question.id">
+        <div v-for="(element, idx) in question" :key="element.id">
+          <div v-if="idx === 0">
+            <h6>{{element.index}} - {{element.value}}</h6>
+          </div>
+          <div v-else>
+            <p>{{element.index}}</p>
+            <p>{{element.value}}</p>
+          </div>
+          <hr>
+        </div>
+      </div>
     </b-modal>
   </Layout>
   
