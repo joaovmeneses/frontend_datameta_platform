@@ -74,8 +74,9 @@ export default {
           })
           .then( async (res) => {
             if(res.data.body && res.data.status === 200) {
-              await sessionStorage.setItem('userToken', res.data.body.session)
-              await sessionStorage.setItem('userRole', res.data.body.user.Role.name)
+              sessionStorage.setItem('userToken', res.data.body.session)
+              sessionStorage.setItem('userRole', res.data.body.user.Role.name)
+              vm.$forceUpdate() // Gambi para forcar o menu a atualizar
               this.$router.push({
                 name: "default",
               })

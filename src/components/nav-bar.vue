@@ -641,7 +641,7 @@ export default {
             <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
           </template>
           <!-- item-->
-          <b-dropdown-item>
+          <!--b-dropdown-item>
             <router-link tag="span" to="/contacts/profile">
               <i class="bx bx-user font-size-16 align-middle me-1"></i>
               {{ $t("navbar.dropdown.henry.list.profile") }}
@@ -660,7 +660,7 @@ export default {
             <i class="bx bx-lock-open font-size-16 align-middle me-1"></i>
             {{ $t("navbar.dropdown.henry.list.lockscreen") }}
           </b-dropdown-item>
-          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-divider></b-dropdown-divider-->
           <a
             href="/logout"
            
