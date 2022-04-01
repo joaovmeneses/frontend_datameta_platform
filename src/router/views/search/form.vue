@@ -36,6 +36,7 @@ export default {
         state: '',
         startDate: '',
         endDate: '',
+        urlBi: '',
         searchMongoId: null,
         userRequesterId: 2,
       },
@@ -159,7 +160,6 @@ export default {
                     v-model="search.state"
                     type="text"
                     class="form-control"
-                    placeholder="Nome do Usuario..."
                   />
                 </div>
               </div> 
@@ -174,7 +174,6 @@ export default {
                     v-model="search.city"
                     type="text"
                     class="form-control"
-                    placeholder="Nome do Usuario..."
                   />
                 </div>
               </div> 
@@ -203,7 +202,6 @@ export default {
                     v-model="search.methodology"
                     type="text"
                     class="form-control"
-                    placeholder="Nome do Usuario..."
                   />
                 </div>
               </div>
@@ -219,7 +217,21 @@ export default {
                     v-model="search.searchType"
                     type="text"
                     class="form-control"
-                    placeholder="Nome do Usuario..."
+                  />
+                </div>
+              </div> 
+
+              <div class="form-group row mb-4">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Link BI</label
+                >
+                <div class="col-lg-10">
+                  <input
+                    :disabled="block"
+                    id="projectname"
+                    v-model="search.urlBi"
+                    type="text"
+                    class="form-control"
                   />
                 </div>
               </div> 
