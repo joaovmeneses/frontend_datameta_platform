@@ -134,6 +134,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <textarea
+                    @onchange="search.description = $event.target.value"
                     :disabled="block"
                     id="projectdesc"
                     class="form-control"

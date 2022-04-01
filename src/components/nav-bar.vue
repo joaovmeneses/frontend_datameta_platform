@@ -1,6 +1,4 @@
 <script>
-import axios from "axios";
-
 import i18n from "../i18n";
 
 import simplebar from "simplebar-vue";
@@ -91,11 +89,10 @@ export default {
       i18n.locale = locale;
     },
     logoutUser() {
-      // eslint-disable-next-line no-unused-vars
-      axios.get("http://127.0.0.1:8000/api/logout").then((res) => {
-        this.$router.push({
-          name: "default",
-        });
+      sessionStorage.removeItem("userToken");      
+      sessionStorage.removeItem("userRole");      
+      this.$router.push({
+        name: "login",
       });
     },
   },
@@ -662,8 +659,8 @@ export default {
           </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider-->
           <a
-            href="/logout"
-           
+            href="javascript: void(0);"
+            @click="logoutUser()"
             class="dropdown-item text-danger"
           >
             <i
