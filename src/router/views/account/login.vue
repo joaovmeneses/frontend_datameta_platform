@@ -76,7 +76,6 @@ export default {
             if(res.data.body && res.data.status === 200) {
               sessionStorage.setItem('userToken', res.data.body.session)
               sessionStorage.setItem('userRole', res.data.body.user.Role.name)
-              vm.$forceUpdate() // Gambi para forcar o menu a atualizar
               this.$router.push({
                 name: "default",
               })

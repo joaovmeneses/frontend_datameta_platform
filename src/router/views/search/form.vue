@@ -61,6 +61,11 @@ export default {
         return element
       }
     },
+    setDescription(description) {
+      this.search.description = description
+      // eslint-disable-next-line no-console
+      console.log(this.search)
+    },
     async adjustDate(date) {
       return `${this.addZeroIfNeed(await date.getDate())}/${this.addZeroIfNeed(await date.getMonth() + 1)}/${await date.getFullYear()}`
     },
@@ -134,7 +139,7 @@ export default {
                 >
                 <div class="col-lg-10">
                   <textarea
-                    @onchange="search.description = $event.target.value"
+                    v-model="search.description"
                     :disabled="block"
                     id="projectdesc"
                     class="form-control"
