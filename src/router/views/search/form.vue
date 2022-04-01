@@ -4,12 +4,14 @@ import DatePicker from "vue2-datepicker";
 
 import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
+import axios from 'axios';
 
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
   mounted() {
     const vm = this
     const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+    //get users
     this.$http.get('user/role/2', { headers })
     .then((res) => {
       vm.users = res.data.body
@@ -19,6 +21,16 @@ export default {
       console.log(err)
       alert("Houve um erro ao tentar resgatar os usuarios!")
     })
+    //get states
+    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/', { headers })
+    .then((res) => {
+      vm.states = res.data
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err)
+      alert("Houve um erro ao tentar resgatar os estados!")
+    })
   },
   data() {
     return {
@@ -27,6 +39,7 @@ export default {
       block: false,
       loading: false,
       userSelected: {},
+      states: [],
       methodologies: [
         "Telefone",
         "Internet",
@@ -43,7 +56,7 @@ export default {
         searchType: '',
         registred: false,
         city: '',
-        state: '',
+        state: '0',
         startDate: '',
         endDate: '',
         urlBi: '',
@@ -164,13 +177,12 @@ export default {
                   >Estado</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.state"
-                    type="text"
-                    class="form-control"
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.state" id="">
+                    <option value="0">Selecione...</option>
+                    <option v-for="state in states" :key="state.id" :value="state.sigla">
+                      {{state.nome}} - {{state.sigla}}
+                    </option>
+                  </select>
                 </div>
               </div> 
               <div class="form-group row mb-4">
