@@ -19,7 +19,7 @@ export default {
         return {
             menuItems: userRole === 'Admin' ? menuItemsAdmin : menuItems,
             menuData: null,
-        };
+        }
     },
     mounted: function () {
         // eslint-disable-next-line no-unused-vars

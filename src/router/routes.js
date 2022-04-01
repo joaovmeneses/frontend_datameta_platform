@@ -14,6 +14,7 @@ export default [
     title:'test',
     meta: {
       authRequired: true,
+      reload: true,
     },
     component: () => import('./views/search/form'),
   },
