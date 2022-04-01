@@ -143,6 +143,10 @@ export default {
         name: "login",
       });
     } else {
+      if(localStorage.getItem("reload")) {
+        localStorage.removeItem("reload")
+        window.location.reload()
+      }
       const vm = this
       if(sessionStorage.getItem('userRole') === 'Admin') {
         this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {

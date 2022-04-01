@@ -87,7 +87,9 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    localStorage.setItem('reload', true)
+  },
 }
 </script>
 
