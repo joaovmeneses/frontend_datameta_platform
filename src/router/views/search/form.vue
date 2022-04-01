@@ -40,6 +40,7 @@ export default {
       loading: false,
       userSelected: {},
       states: [],
+      cities: [],
       methodologies: [
         "Telefone",
         "Internet",
@@ -60,8 +61,7 @@ export default {
         startDate: '',
         endDate: '',
         urlBi: '',
-        searchMongoId: null,
-        userRequesterId: 2,
+        questionsId: null,
       },
       file: {
         searchId: '',
@@ -78,6 +78,19 @@ export default {
     }
   },
   methods: {
+    getCities() {
+      const vm = this
+      axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + this.search.state + '/municipios')
+      .then((res) => {
+        vm.cities = res.data
+        vm.search.city ='0'
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err)
+        alert("Houve um erro ao tentar resgatar os estados!")
+      })
+    },
     addZeroIfNeed(element) {
       if(element < 9) {
         return `0${element}`
@@ -102,7 +115,7 @@ export default {
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         vm.loading = false
         if(res.data.status === 200 && res.data.body.id) {
-          this.file.searchId = res.data.body.searchMongoId
+          this.file.searchId = res.data.body.questionsId
           vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
@@ -177,7 +190,7 @@ export default {
                   >Estado</label
                 >
                 <div class="col-lg-10">
-                  <select class="form-control" :disabled="block" v-model="search.state" id="">
+                  <select @change="getCities()" class="form-control" :disabled="block" v-model="search.state" id="">
                     <option value="0">Selecione...</option>
                     <option v-for="state in states" :key="state.id" :value="state.sigla">
                       {{state.nome}} - {{state.sigla}}
@@ -190,13 +203,12 @@ export default {
                   >Cidade</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.city"
-                    type="text"
-                    class="form-control"
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.city" id="">
+                    <option value="0">Selecione...</option>
+                    <option v-for="city in cities" :key="city.id" :value="city.nome">
+                      {{city.nome}}
+                    </option>
+                  </select>
                 </div>
               </div> 
               <div class="form-group row mb-4">
@@ -264,7 +276,6 @@ export default {
                     :disabled="block"
                     type="checkbox"
                     v-model="search.registed"
-                    @change="test()"
                   />
                 </div>
               </div> 
