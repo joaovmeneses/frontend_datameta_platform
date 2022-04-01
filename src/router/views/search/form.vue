@@ -4,12 +4,14 @@ import DatePicker from "vue2-datepicker";
 
 import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
+import axios from 'axios';
 
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
   mounted() {
     const vm = this
     const headers = { 'Authorization': 'Bearer ' + sessionStorage.getItem('userToken') }
+    //get users
     this.$http.get('user/role/2', { headers })
     .then((res) => {
       vm.users = res.data.body
@@ -19,6 +21,16 @@ export default {
       console.log(err)
       alert("Houve um erro ao tentar resgatar os usuarios!")
     })
+    //get states
+    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/', { headers })
+    .then((res) => {
+      vm.states = res.data
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err)
+      alert("Houve um erro ao tentar resgatar os estados!")
+    })
   },
   data() {
     return {
@@ -27,17 +39,29 @@ export default {
       block: false,
       loading: false,
       userSelected: {},
+      states: [],
+      cities: [],
+      methodologies: [
+        "Telefone",
+        "Internet",
+        "Presencial"
+      ],
+      types: [
+        "Estimulada",
+        "Espontanea",
+        "Hibrida"
+      ],
       search: {
         description: '',
         methodology: '',
         searchType: '',
         registred: false,
         city: '',
-        state: '',
+        state: '0',
         startDate: '',
         endDate: '',
-        searchMongoId: null,
-        userRequesterId: 2,
+        urlBi: '',
+        questionsId: null,
       },
       file: {
         searchId: '',
@@ -54,6 +78,19 @@ export default {
     }
   },
   methods: {
+    getCities() {
+      const vm = this
+      axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + this.search.state + '/municipios')
+      .then((res) => {
+        vm.cities = res.data
+        vm.search.city ='0'
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err)
+        alert("Houve um erro ao tentar resgatar os estados!")
+      })
+    },
     addZeroIfNeed(element) {
       if(element < 9) {
         return `0${element}`
@@ -78,7 +115,7 @@ export default {
       this.$http.post('search/', this.search  , { headers }).then((res) => {
         vm.loading = false
         if(res.data.status === 200 && res.data.body.id) {
-          this.file.searchId = res.data.body.searchMongoId
+          this.file.searchId = res.data.body.questionsId
           vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
@@ -153,14 +190,12 @@ export default {
                   >Estado</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.state"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
+                  <select @change="getCities()" class="form-control" :disabled="block" v-model="search.state" id="">
+                    <option value="0">Selecione...</option>
+                    <option v-for="state in states" :key="state.id" :value="state.sigla">
+                      {{state.nome}} - {{state.sigla}}
+                    </option>
+                  </select>
                 </div>
               </div> 
               <div class="form-group row mb-4">
@@ -168,14 +203,12 @@ export default {
                   >Cidade</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.city"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.city" id="">
+                    <option value="0">Selecione...</option>
+                    <option v-for="city in cities" :key="city.id" :value="city.nome">
+                      {{city.nome}}
+                    </option>
+                  </select>
                 </div>
               </div> 
               <div class="form-group row mb-4">
@@ -197,14 +230,11 @@ export default {
                   >Metodologia</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.methodology"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome do Usuario..."
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.methodology" id="">
+                    <option v-for="methodology in methodologies" :key="methodology" value="">
+                      {{methodology}}
+                    </option>
+                  </select>
                 </div>
               </div>
 
@@ -213,13 +243,25 @@ export default {
                   >Tipo de Pesquisa</label
                 >
                 <div class="col-lg-10">
+                  <select class="form-control" :disabled="block" v-model="search.searchType" id="">
+                    <option v-for="type in types" :key="type" value="">
+                      {{type}}
+                    </option>
+                  </select>
+                </div>
+              </div> 
+
+              <div class="form-group row mb-4">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Link BI</label
+                >
+                <div class="col-lg-10">
                   <input
                     :disabled="block"
                     id="projectname"
-                    v-model="search.searchType"
+                    v-model="search.urlBi"
                     type="text"
                     class="form-control"
-                    placeholder="Nome do Usuario..."
                   />
                 </div>
               </div> 
@@ -234,7 +276,6 @@ export default {
                     :disabled="block"
                     type="checkbox"
                     v-model="search.registed"
-                    @change="test()"
                   />
                 </div>
               </div> 

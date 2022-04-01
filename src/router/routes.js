@@ -44,6 +44,11 @@ export default [
     component: () => import('./views/calendar/calendar'),
   },
   {
+    path: '/bi/:sufixLink',
+    name: 'bi',
+    component: () => import('./views/bi/bi'),
+  },
+  {
     path: '/logout',
     name: 'logout',
   },
