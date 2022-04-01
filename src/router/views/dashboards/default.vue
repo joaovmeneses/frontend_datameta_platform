@@ -136,6 +136,9 @@ export default {
         console.log(err)
       })
     },
+    pushBi(sufixLink) {
+      this.$router.push(`/bi/${sufixLink}`)
+    }
   },
   mounted() {
     if(!sessionStorage.getItem('userToken')) {
@@ -240,6 +243,15 @@ export default {
                 title="Comments"
               >
                 <button variant="primary" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">Mais...</button>
+                
+              </li>
+              <li
+                v-if="search.urlBi"
+                v-b-tooltip.hover.top
+                class="list-inline-item me-3"
+                title="Comments"
+              >
+                <button variant="primary" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">BI</button>
                 
               </li>
             </ul>
