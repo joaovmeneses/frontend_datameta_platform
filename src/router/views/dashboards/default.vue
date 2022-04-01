@@ -180,7 +180,7 @@ export default {
   <Layout>
     <PageHeader :title="title" :items="items" />
     <div class="row">
-      <div v-for="grid in searchs" :key="grid.id" class="col-xl-4 col-sm-6">
+      <div v-for="search in searchs" :key="search.id" class="col-xl-4 col-sm-6">
         <div class="card">
           <div class="card-body">
             <div class="d-flex">
@@ -194,10 +194,10 @@ export default {
 
               <div class="flex-grow-1 overflow-hidden">
                 <h5 class="text-truncate font-size-14">
-                  <a v-if="grid.UserRequester" href="javascript: void(0);" class="text-dark">{{ grid.UserRequester.name }}</a>
-                  <a v-else href="javascript: void(0);" class="text-dark">{{ grid.description.substr(0, 50) }}...</a>
+                  <a v-if="search.UserRequester" href="javascript: void(0);" class="text-dark">{{ search.UserRequester.name }}</a>
+                  <a v-else href="javascript: void(0);" class="text-dark">{{ search.description.substr(0, 50) }}...</a>
                 </h5>
-                <span class="text-muted mb-4">{{grid.city}}/{{grid.state}}</span><br>
+                <span class="text-muted mb-4">{{search.city}}/{{search.state}}</span><br>
                 <div class="avatar-group">
                   <div class="avatar-group-item">
                     <a
@@ -219,7 +219,7 @@ export default {
                 title="Due Date"
               >
                 <i class="bx bx-calendar me-1"></i>
-                {{ grid.startDate }} - {{ grid.endDate }}
+                {{ search.startDate }} - {{ search.endDate }}
               </li>
               |
               <li
@@ -239,7 +239,7 @@ export default {
                 class="list-inline-item me-3"
                 title="Comments"
               >
-                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(grid, grid.searchMongoId)">Mais...</button>
+                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">Mais...</button>
                 
               </li>
             </ul>

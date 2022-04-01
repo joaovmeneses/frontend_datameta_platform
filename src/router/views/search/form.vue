@@ -27,6 +27,16 @@ export default {
       block: false,
       loading: false,
       userSelected: {},
+      methodologies: [
+        "Telefone",
+        "Internet",
+        "Presencial"
+      ],
+      types: [
+        "Estimulada",
+        "Espontanea",
+        "Hibrida"
+      ],
       search: {
         description: '',
         methodology: '',
@@ -196,13 +206,11 @@ export default {
                   >Metodologia</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.methodology"
-                    type="text"
-                    class="form-control"
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.methodology" id="">
+                    <option v-for="methodology in methodologies" :key="methodology" value="">
+                      {{methodology}}
+                    </option>
+                  </select>
                 </div>
               </div>
 
@@ -211,13 +219,11 @@ export default {
                   >Tipo de Pesquisa</label
                 >
                 <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.searchType"
-                    type="text"
-                    class="form-control"
-                  />
+                  <select class="form-control" :disabled="block" v-model="search.searchType" id="">
+                    <option v-for="type in types" :key="type" value="">
+                      {{type}}
+                    </option>
+                  </select>
                 </div>
               </div> 
 
