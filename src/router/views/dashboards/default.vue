@@ -138,6 +138,9 @@ export default {
     },
     pushBi(sufixLink) {
       this.$router.push(`/bi/${sufixLink}`)
+    },
+    pushMap(id) {
+      this.$router.push(`/map/${id}`)
     }
   },
   mounted() {
@@ -274,7 +277,7 @@ export default {
       <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
       <p>Mapas: </p>
       <div v-for="map in modalInfo.Map" :key="map.id">
-        <p>{{map.title}}: <a :href="'http://' + map.link">Visitar</a></p>
+        <p>{{map.title}}: <a href="javascript: void(0)" @click="pushMap(map.id)">Visitar</a></p>
       </div>
       <hr>
       <h4>Questoes: </h4>
