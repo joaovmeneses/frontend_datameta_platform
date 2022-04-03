@@ -301,20 +301,20 @@ export default {
                 <div class="col-lg-4">
                 </div>
                 <div class="col-lg-1">
-                  <b-button class="btn-info btn-rounded" style="float:right" @click="addMap()">
+                  <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addMap()">
                     +
                   </b-button>
                 </div>
               </div>
-              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="map.link">
+              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="map">
                 <label for="projectname" class="col-form-label col-lg-2"
                   >Informacoes:</label
                 >
                 <div class="col-lg-3">
                   <input
                     :disabled="block"
-                    id="projectname"
-                    v-model="search.urlBi"
+                    id=""
+                    v-model="map.title"
                     type="text"
                     placeholder="Titulo do Mapa"
                     class="form-control"
@@ -324,16 +324,16 @@ export default {
                 <div class="col-lg-6">
                   <input
                     :disabled="block"
-                    id="projectname"
-                    v-model="search.urlBi"
+                    id=""
+                    v-model="map.link"
                     placeholder="Link do Mapa"
                     type="text"
                     class="form-control"
                   />
                 </div>
                 <div class="col-lg-1">
-                 <b-button class="btn-dnager btn-rounded" @click="rmvMap(idx)">
-                    -
+                 <b-button variant="outline-danger" :disabled="block" class="btn btn-rounded" @click="rmvMap(idx)">
+                    <i class="bx bxs-trash"></i>
                   </b-button>
                 </div>
               </div> 
