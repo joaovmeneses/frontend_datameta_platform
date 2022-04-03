@@ -272,6 +272,10 @@ export default {
       <p>Periodo: {{modalInfo.startDate}} - {{modalInfo.endDate}}</p>
       <p>Metodologia: {{modalInfo.methodology}}</p>
       <p>Tipo de Pesquisa: {{modalInfo.searchType}} </p>
+      <p>Mapas: </p>
+      <div v-for="map in modalInfo.Map" :key="map.id">
+        <p>{{map.title}}: <a :href="'http://' + map.link">Visitar</a></p>
+      </div>
       <hr>
       <h4>Questoes: </h4>
       <br><br>
