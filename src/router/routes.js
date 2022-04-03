@@ -49,6 +49,11 @@ export default [
     component: () => import('./views/bi/bi'),
   },
   {
+    path: '/map/:id',
+    name: 'map',
+    component: () => import('./views/map/map'),
+  },
+  {
     path: '/logout',
     name: 'logout',
   },

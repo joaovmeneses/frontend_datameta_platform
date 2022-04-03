@@ -62,6 +62,12 @@ export default {
         endDate: '',
         urlBi: '',
         questionsId: null,
+        maps: [
+          {
+            link: "",
+            title: ""
+          },
+        ]
       },
       file: {
         searchId: '',
@@ -78,6 +84,15 @@ export default {
     }
   },
   methods: {
+    addMap(){
+      this.search.maps.push({
+        link: "",
+        title: ""
+      })
+    },
+    rmvMap(idx){
+      this.search.maps.pop(idx)
+    },
     getCities() {
       const vm = this
       axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + this.search.state + '/municipios')
@@ -250,7 +265,7 @@ export default {
                   </select>
                 </div>
               </div> 
-
+              
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"
                   >Link BI</label
@@ -264,7 +279,7 @@ export default {
                     class="form-control"
                   />
                 </div>
-              </div> 
+              </div>
 
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"
@@ -277,6 +292,49 @@ export default {
                     type="checkbox"
                     v-model="search.registed"
                   />
+                </div>
+              </div> 
+              <hr>
+              <div class="row mb-4">
+                <div class="col-lg-5"></div>
+                <h2 class="col-lg-2">Mapas</h2>
+                <div class="col-lg-4">
+                </div>
+                <div class="col-lg-1">
+                  <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addMap()">
+                    +
+                  </b-button>
+                </div>
+              </div>
+              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="map">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Informacoes:</label
+                >
+                <div class="col-lg-3">
+                  <input
+                    :disabled="block"
+                    id=""
+                    v-model="map.title"
+                    type="text"
+                    placeholder="Titulo do Mapa"
+                    class="form-control"
+                  />
+                </div>
+                
+                <div class="col-lg-6">
+                  <input
+                    :disabled="block"
+                    id=""
+                    v-model="map.link"
+                    placeholder="Link do Mapa"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+                <div class="col-lg-1">
+                 <b-button variant="outline-danger" :disabled="block" class="btn btn-rounded" @click="rmvMap(idx)">
+                    <i class="bx bxs-trash"></i>
+                  </b-button>
                 </div>
               </div> 
             </form>
