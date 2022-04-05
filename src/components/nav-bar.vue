@@ -107,7 +107,7 @@ export default {
         <div class="navbar-brand-box">
           <router-link tag="a" to="/" class="logo logo-dark">
             <span class="logo-sm">
-              <img src="@/assets/images/logo.svg" alt height="22" />
+              <img src="@/assets/images/logo-icon.png" alt height="22" />
             </span>
             <span class="logo-lg">
               <img src="@/assets/images/logo-dark.png" alt height="17" />

@@ -98,12 +98,12 @@ export default {
     <div class="row justify-content-center">  
       <div class="col-md-8 col-lg-6 col-xl-5">
         <div class="card overflow-hidden">
-          <div class="bg-soft bg-primary">
+          <div class="bg-soft bg-danger">
             <div class="row">
               <div class="col-7">
-                <div class="text-primary p-4">
-                  <h5 class="text-primary">Welcome Back !</h5>
-                  <p>Sign in to continue to Skote.</p>
+                <div class="text-danger p-4">
+                  <h5 class="text-danger">Bem-vindo(a) de volta!</h5>
+                  <p>Efetue o login para prosseguir!</p>
                 </div>
               </div>
               <div class="col-5 align-self-end">
@@ -120,7 +120,7 @@ export default {
               <router-link tag="a" to="/">
                 <div class="avatar-md profile-user-wid mb-4">
                   <span class="avatar-title rounded-circle bg-light">
-                    <img src="@/assets/images/logo.svg" alt height="34" />
+                    <img src="@/assets/images/logo-icon.png" alt height="34" />
                   </span>
                 </div>
               </router-link>
@@ -150,7 +150,7 @@ export default {
                   id="input-1"
                   v-model="email"
                   type="text"
-                  placeholder="Enter email"
+                  placeholder="Seu email"
                   :class="{ 'is-invalid': submitted && $v.email.$error }"
                 ></b-form-input>
                 <div
@@ -172,7 +172,7 @@ export default {
                   id="input-2"
                   v-model="password"
                   type="password"
-                  placeholder="Enter password"
+                  placeholder="Sua senha"
                   :class="{ 'is-invalid': submitted && $v.password.$error }"
                 ></b-form-input>
                 <div
@@ -193,41 +193,11 @@ export default {
                 </b-form-checkbox>
               <div class="mt-3 d-grid">
                 
-                <b-button type="submit" variant="primary" class="btn-block">
+                <b-button type="submit" variant="danger" class="btn-block">
                   <div v-if='loading' class="spinner-border" role="status">
                   </div>
-                  <span v-else>Sign In</span>
+                  <span v-else>Entrar</span>
                 </b-button>
-              </div>
-              <div class="mt-4 text-center">
-                <h5 class="font-size-14 mb-3">Sign in with</h5>
-
-                <ul class="list-inline">
-                  <li class="list-inline-item">
-                    <a
-                      href="javascript: void(0)"
-                      class="social-list-item bg-primary text-white border-primary"
-                    >
-                      <i class="mdi mdi-facebook"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a
-                      href="javascript: void(0)"
-                      class="social-list-item bg-info text-white border-info"
-                    >
-                      <i class="mdi mdi-twitter"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a
-                      href="javascript: void(0)"
-                      class="social-list-item bg-danger text-white border-danger"
-                    >
-                      <i class="mdi mdi-google"></i>
-                    </a>
-                  </li>
-                </ul>
               </div>
               <div class="mt-4 text-center">
                 <router-link tag="a" to="/forgot-password" class="text-muted">
@@ -242,17 +212,7 @@ export default {
 
         <div class="mt-5 text-center">
           <p>
-            Don't have an account ?
-            <router-link
-              tag="a"
-              to="/register"
-              class="fw-medium text-primary"
-              >Signup now</router-link
-            >
-          </p>
-          <p>
-            © {{ new Date().getFullYear() }} Skote. Crafted with
-            <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+            © {{ new Date().getFullYear() }} Data 3<br> All rights reserved.
           </p>
         </div>
         <!-- end row -->
