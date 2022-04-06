@@ -204,6 +204,16 @@ export default {
                   <a v-else href="javascript: void(0);" class="text-dark">{{ search.description.substr(0, 50) }}...</a>
                 </h5>
                 <span class="text-muted mb-4">{{search.city}}/{{search.state}}</span><br>
+                <li
+                  v-b-tooltip.hover.top
+                  class="list-inline-item me-3"
+                  title="Comments"
+                >
+                  <span
+                    class="badge bg-info"
+                    >Não Iniciado</span
+                  >
+                </li>
                 <div class="avatar-group">
                   <div class="avatar-group-item">
                     <a
@@ -228,33 +238,20 @@ export default {
                 {{ search.startDate }} - {{ search.endDate }}
               </li>
               |
-              <li
-                v-b-tooltip.hover.top
-                class="list-inline-item me-3"
-                title="Comments"
-              >
-                <span>Status: </span>
-                <span
-                  class="badge bg-info"
-                  >Não Iniciado</span
-                >
-              </li>
-              |
-              <li
-                v-b-tooltip.hover.top
-                class="list-inline-item me-3"
-                title="Comments"
-              >
-                <button variant="primary" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">Mais...</button>
-                
-              </li>
+                <b-button class="" variant="link" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">
+                  <i class="dripicons-information"></i>
+                </b-button>
               <li
                 v-if="search.urlBi"
                 v-b-tooltip.hover.top
                 class="list-inline-item me-3"
                 title="Comments"
               >
-                <button variant="primary" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">BI</button>
+              |
+                <b-button variant="link" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">
+                  BI
+                  <i class='dripicons-graph-bar' ></i>
+                </b-button>
                 
               </li>
             </ul>
