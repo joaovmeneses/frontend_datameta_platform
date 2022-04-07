@@ -1,27 +1,27 @@
 const categories = [
     {
         name: 'Danger',
-        value: 'bg-danger'
+        value: 'bg-danger text-white'
     },
     {
         name: 'Success',
-        value: 'bg-success'
+        value: 'bg-success text-white'
     },
     {
         name: 'Primary',
-        value: 'bg-primary'
+        value: 'bg-primary text-white'
     },
     {
         name: 'Info',
-        value: 'bg-info'
+        value: 'bg-info text-white'
     },
     {
         name: 'Dark',
-        value: 'bg-dark'
+        value: 'bg-dark text-white'
     },
     {
         name: 'Warning',
-        value: 'bg-warning'
+        value: 'bg-warning text-white'
     },
 ];
 
