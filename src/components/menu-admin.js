@@ -22,5 +22,10 @@ export const menuItemsAdmin = [
         link: "/newSearch",
         icon: 'bx-search-alt'
     },
+    {
+        id: 6,
+        label: "menuitems.indexBi.text",
+        link: "/business-intelligence",
+        icon: 'bxs-pie-chart-alt-2'
+    },
 ];
-

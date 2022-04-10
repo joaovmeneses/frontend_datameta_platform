@@ -49,6 +49,11 @@ export default [
     component: () => import('./views/bi/bi'),
   },
   {
+    path: '/business-intelligence/',
+    name: 'indexBi',
+    component: () => import('./views/bi/index'),
+  },
+  {
     path: '/map/:id',
     name: 'map',
     component: () => import('./views/map/map'),
