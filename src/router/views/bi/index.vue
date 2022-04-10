@@ -22,6 +22,13 @@ export default {
   },
   data() {
     return {
+      loading: false, 
+      form: {
+        title: '',
+        url: '',
+        description: '',
+        resultPath: ''
+      },
       title: "Business Intelligence",
       items: [
         {
@@ -40,9 +47,22 @@ export default {
     const vm = this
     this.$http.get('businessIntelligence/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
         vm.businessIntelligencies = response.data;
-        // eslint-disable-next-line no-console
-        console.log(response.data)
     });
+  },
+  methods: {
+    submit() {
+      this.loading = true;
+      this.$http.post('businessIntelligence/', this.form, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
+        this.loading = false;
+        if(response.data.status === 200 && response.data.body > 0) {
+          location.reload()
+        } else {
+        // eslint-disable-next-line no-console
+          console.log(response.data)
+          alert("Houve um error ao cadastrar a BI")
+        }
+      })  
+    }
   }
 };
 </script>
@@ -56,6 +76,60 @@ export default {
         <div class="card">
           <div class="card-body">
             <h4 class="card-title mb-4">Formulario</h4>
+
+            <form>
+              <div class="form-group row mb-4">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Titulo</label
+                >
+                <div class="col-lg-10">
+                  <input
+                    v-model="form.title"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Link do BI</label
+                >
+                <div class="col-lg-10">
+                  <input
+                    v-model="form.url"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="projectdesc" class="col-form-label col-lg-2"
+                  >Descricao</label
+                >
+                <div class="col-lg-10">
+                  <textarea
+                    v-model="form.description"
+                    id="projectdesc"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Coloque uma breve descricao..."
+                  ></textarea>
+                </div>
+              </div>
+            </form>
+             <div class="row justify-content-end">
+              <div class="col-lg-10">
+                <button @click="submit()" class="btn btn-primary" style="float:right">
+                  <div v-if='loading' class="spinner-border" role="status">
+                  </div>
+                  <div v-else>
+                    Concluir
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
