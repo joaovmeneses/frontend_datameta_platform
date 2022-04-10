@@ -64,7 +64,6 @@ export default {
         state: '0',
         startDate: '',
         endDate: '',
-        urlBi: '',
         questionsId: null,
         maps: [
           {
@@ -286,21 +285,6 @@ export default {
                   </select>
                 </div>
               </div> 
-              
-              <div class="form-group row mb-4">
-                <label for="projectname" class="col-form-label col-lg-2"
-                  >Link BI</label
-                >
-                <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.urlBi"
-                    type="text"
-                    class="form-control"
-                  />
-                </div>
-              </div>
 
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"

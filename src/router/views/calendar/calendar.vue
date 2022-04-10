@@ -13,7 +13,7 @@ import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
 
-import { calendarEvents, categories } from "./data-calendar";
+import { categories } from "./data-calendar";
 
 /**
  * Calendar component
@@ -40,7 +40,7 @@ export default {
           active: true,
         },
       ],
-      calendarEvents: calendarEvents,
+      calendarEvents: [],
       calendarOptions: {
         headerToolbar: {
           left: "prev,next today",
@@ -56,7 +56,7 @@ export default {
         ],
         initialView: "dayGridMonth",
         themeSystem: "bootstrap",
-        initialEvents: calendarEvents,
+        initialEvents: [],
         editable: true,
         droppable: true,
         eventResizableFromStart: true,
@@ -92,6 +92,26 @@ export default {
       title: { required },
       category: { required },
     },
+  },
+  mounted() {
+    const vm = this
+    this.$http.get('search/' + this.$route.params.id + '/calendarEvent', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}})
+    .then((data) => {
+       for (let i = 0; i < data.data.length; i++) {
+        const element = data.data[i]
+
+        let calendarApi = this.newEventData.view.calendar;
+        this.currentEvents = calendarApi.addEvent({
+          id: element.id,
+          title: element.id,
+          start: new Date(element.start),
+          end: new Date(element.start),
+          classNames: element.className,
+        });
+      }
+        // eslint-disable-next-line no-console
+      console.log(vm.calendarEvents)
+    })
   },
   methods: {
     /**

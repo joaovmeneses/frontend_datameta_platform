@@ -17,12 +17,6 @@ export const menuItemsAdmin = [
         icon: 'bxs-file'
     },
     {
-        id: 4,
-        label: "menuitems.calendar.text",
-        link: "/calendar",
-        icon: 'bxs-calendar'
-    },
-    {
         id: 5,
         label: "menuitems.newSearch.text",
         link: "/newSearch",

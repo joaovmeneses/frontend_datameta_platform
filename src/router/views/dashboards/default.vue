@@ -139,6 +139,9 @@ export default {
     pushBi(sufixLink) {
       this.$router.push(`/bi/${sufixLink}`)
     },
+    pushCalendar(searchId) {
+      this.$router.push(`search/${searchId}/calendar/`)
+    },
     pushMap(id) {
       this.$router.push(`/map/${id}`)
     }
@@ -241,19 +244,17 @@ export default {
                 <b-button class="" variant="link" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">
                   <i class="dripicons-information"></i>
                 </b-button>
-              <li
-                v-if="search.urlBi"
-                v-b-tooltip.hover.top
-                class="list-inline-item me-3"
-                title="Comments"
-              >
               |
-                <b-button variant="link" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">
+                <b-button v-if="search.urlBi" variant="link" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">
                   BI
                   <i class='dripicons-graph-bar' ></i>
                 </b-button>
-                
-              </li>
+              
+              <template v-if="search.urlBi">|</template>
+
+                <b-button class="" variant="link" v-b-modal.modal-scrollable @click="pushCalendar(search.id)">
+                  <i class="dripicons-calendar"></i>
+                </b-button>
             </ul>
           </div>
         </div>

@@ -39,7 +39,7 @@ export default [
     component: () => import('./views/file-manager'),
   },
   {
-    path: '/calendar',
+    path: '/search/:id/calendar',
     name: 'calendar',
     component: () => import('./views/calendar/calendar'),
   },

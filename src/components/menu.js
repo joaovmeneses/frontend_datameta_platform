@@ -15,12 +15,6 @@ export const menuItems = [
         label: "menuitems.fileManager.text",
         link: "/file-manager",
         icon: 'bxs-file'
-    },
-    {
-        id: 4,
-        label: "menuitems.calendar.text",
-        link: "/calendar",
-        icon: 'bxs-calendar'
     }
 ];
 
