@@ -22,12 +22,13 @@ export default {
   },
   data() {
     return {
-      loading: false, 
+      loading: false,
       form: {
         title: '',
         url: '',
         description: '',
-        resultPath: ''
+        resultPath: '',
+        searchsId: []
       },
       title: "Business Intelligence",
       items: [
@@ -40,7 +41,9 @@ export default {
           active: true,
         },
       ],
-        businessIntelligencies: []
+        businessIntelligencies: [],
+        searchsData: [],
+        searchList: [{value: ''}],
     };
   },
   mounted() {
@@ -48,6 +51,12 @@ export default {
     this.$http.get('businessIntelligence/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
         vm.businessIntelligencies = response.data;
     });
+    this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
+        vm.searchsData = response.data.body;
+              // eslint-disable-next-line no-console
+      console.log(response.data.body)
+    });
+    
   },
   methods: {
     submit() {
@@ -62,9 +71,21 @@ export default {
           alert("Houve um error ao cadastrar a BI")
         }
       })  
+    },
+    setSearchId(element){
+      // eslint-disable-next-line no-console
+      console.log(element)
+    },
+    addSearch(){
+      this.searchList.push({
+        value: '',
+      })
+    },
+    rmvSearch(idx){
+      this.searchList.splice(idx, 1)
     }
   }
-};
+}
 </script>
 
 <template>
@@ -118,6 +139,40 @@ export default {
                   ></textarea>
                 </div>
               </div>
+
+              <div class="row mb-4">
+                <div class="col-lg-5"></div>
+                <h2 class="col-lg-2">Pesquisas</h2>
+                <div class="col-lg-4">
+                </div>
+                <div class="col-lg-1">
+                  <b-button variant="outline-info" class="btn btn-rounded" style="float:right" @click="addSearch()">
+                    +
+                  </b-button>
+                </div>
+              </div>
+              <div class="form-group row mb-4" v-for="(search, idx) in searchList" :key="idx">
+                <label for="projectdesc" class="col-form-label col-lg-2"
+                  >Pesquisa</label
+                >
+                <div class="col-lg-9">
+                  <select class="form-control" v-model="search.value">
+                    <option value="">Selecione...</option>
+                    <option v-for='(search, j) in searchsData' :value="search.id" :key='j'>
+                      {{search.UserRequester.name}} | {{search.city}}/{{search.state}} - {{search.startDate}}   
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg-1">
+                 <b-button variant="outline-danger" class="btn btn-rounded" @click="rmvSearch(idx)">
+                    <i class="bx bxs-trash"></i>
+                  </b-button>
+                </div>
+              </div>
+            
+             
+
+              
             </form>
              <div class="row justify-content-end">
               <div class="col-lg-10">
