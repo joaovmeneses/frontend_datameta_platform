@@ -245,12 +245,12 @@ export default {
                   <i class="dripicons-information"></i>
                 </b-button>
               |
-                <b-button v-if="search.urlBi" variant="link" v-b-modal.modal-scrollable @click="pushBi(search.urlBi)">
+                <b-button v-if="search.BusinessIntelligence" variant="link" v-b-modal.modal-scrollable @click="pushBi(search.BusinessIntelligence.id)">
                   BI
                   <i class='dripicons-graph-bar' ></i>
                 </b-button>
               
-              <template v-if="search.urlBi">|</template>
+              <template v-if="search.BusinessIntelligence">|</template>
 
                 <b-button class="" variant="link" v-b-modal.modal-scrollable @click="pushCalendar(search.id)">
                   <i class="dripicons-calendar"></i>

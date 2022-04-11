@@ -200,7 +200,7 @@ export default {
                 <div class="col-lg-10">
                   <select class="form-control" v-model="search.userRequesterId" >
                     <option v-for='user in users' :value="user.id" :key='user.id'>
-                      {{user.name}} | {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}}
+                      {{user.name}} <template v-if="user.PoliticalParty">|  {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}} </template>
                     </option>
                   </select>
                 </div>

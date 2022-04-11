@@ -53,14 +53,16 @@ export default {
     });
     this.$http.get('admin/search/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
         vm.searchsData = response.data.body;
-              // eslint-disable-next-line no-console
-      console.log(response.data.body)
     });
     
   },
   methods: {
-    submit() {
+    async submit() {
+      
       this.loading = true;
+      
+      await this.setSearchId()
+
       this.$http.post('businessIntelligence/', this.form, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
         this.loading = false;
         if(response.data.status === 200 && response.data.body > 0) {
@@ -72,9 +74,11 @@ export default {
         }
       })  
     },
-    setSearchId(element){
-      // eslint-disable-next-line no-console
-      console.log(element)
+    async setSearchId(){
+      const vm = this
+      this.searchList.forEach(search => {
+        vm.form.searchsId.push(search.value)
+      });
     },
     addSearch(){
       this.searchList.push({

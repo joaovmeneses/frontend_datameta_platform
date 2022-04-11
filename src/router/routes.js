@@ -44,7 +44,7 @@ export default [
     component: () => import('./views/calendar/calendar'),
   },
   {
-    path: '/bi/:sufixLink',
+    path: '/bi/:id',
     name: 'bi',
     component: () => import('./views/bi/bi'),
   },
