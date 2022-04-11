@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      urlBi: 'https://app.powerbi.com/view?r=' + this.$route.params.sufixLink,
+      urlBi: '',
       title: "Dashboard",
       items: [
         {
@@ -38,8 +38,10 @@ export default {
     };
   },
   mounted() {
-  // eslint-disable-next-line no-console
-    console.log(this.$route.params.sufixLink)
+    const vm = this
+    this.$http.get('businessIntelligence/' + this.$route.params.id + '/findComplete/', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then(response => {
+      vm.urlBi = response.data.body.url
+    });
   }
 };
 </script>

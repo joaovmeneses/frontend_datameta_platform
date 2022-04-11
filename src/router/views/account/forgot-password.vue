@@ -113,7 +113,7 @@ export default {
               <router-link tag="a" to="/">
                 <div class="avatar-md profile-user-wid mb-4">
                   <span class="avatar-title rounded-circle bg-light">
-                    <img src="@/assets/images/logo.svg" alt height="34" />
+                    <img src="@/assets/images/logo-icon.png" alt height="34" />
                   </span>
                 </div>
               </router-link>

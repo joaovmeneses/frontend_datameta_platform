@@ -6,6 +6,9 @@ import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
 import axios from 'axios';
 
+import { categories } from "../calendar/data-calendar";
+
+
 export default {
   components: { Layout, PageHeader, vueDropzone: vue2Dropzone, DatePicker },
   mounted() {
@@ -51,6 +54,7 @@ export default {
         "Espontanea",
         "Hibrida"
       ],
+      categories: categories,
       search: {
         description: '',
         methodology: '',
@@ -60,14 +64,20 @@ export default {
         state: '0',
         startDate: '',
         endDate: '',
-        urlBi: '',
         questionsId: null,
         maps: [
           {
             link: "",
             title: ""
           },
-        ]
+        ],
+        calendarEvents: [
+          {
+            title: "",
+            start: "",
+            className: "",
+          },
+        ],
       },
       file: {
         searchId: '',
@@ -90,8 +100,18 @@ export default {
         title: ""
       })
     },
+    addCalendarEvent(){
+      this.search.calendarEvents.push({
+        title: "",
+        start: "",
+        className: "",
+      })
+    },
     rmvMap(idx){
       this.search.maps.pop(idx)
+    },
+    rmvCalendarEvent(idx){
+      this.search.calendarEvents.pop(idx)
     },
     getCities() {
       const vm = this
@@ -180,7 +200,7 @@ export default {
                 <div class="col-lg-10">
                   <select class="form-control" v-model="search.userRequesterId" >
                     <option v-for='user in users' :value="user.id" :key='user.id'>
-                      {{user.name}} | {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}}
+                      {{user.name}} <template v-if="user.PoliticalParty">|  {{user.PoliticalParty.name}} - {{user.PoliticalParty.acronym}} </template>
                     </option>
                   </select>
                 </div>
@@ -265,21 +285,6 @@ export default {
                   </select>
                 </div>
               </div> 
-              
-              <div class="form-group row mb-4">
-                <label for="projectname" class="col-form-label col-lg-2"
-                  >Link BI</label
-                >
-                <div class="col-lg-10">
-                  <input
-                    :disabled="block"
-                    id="projectname"
-                    v-model="search.urlBi"
-                    type="text"
-                    class="form-control"
-                  />
-                </div>
-              </div>
 
               <div class="form-group row mb-4">
                 <label for="projectname" class="col-form-label col-lg-2"
@@ -306,7 +311,7 @@ export default {
                   </b-button>
                 </div>
               </div>
-              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="map">
+              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="idx">
                 <label for="projectname" class="col-form-label col-lg-2"
                   >Informacoes:</label
                 >
@@ -337,6 +342,55 @@ export default {
                   </b-button>
                 </div>
               </div> 
+
+              <hr>
+              <div class="row mb-4">
+                <div class="col-lg-5"></div>
+                <h2 class="col-lg-4">Datas no Calendario</h2>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-1">
+                  <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addCalendarEvent()">
+                    +
+                  </b-button>
+                </div>
+              </div>
+
+              <div class="form-group row mb-4" v-for="(calendarEvent, idx) in search.calendarEvents" :key="calendarEvent.start">
+                <label for="projectname" class="col-form-label col-lg-2"
+                  >Evento:</label
+                >
+                <div class="col-lg-3">
+                  <date-picker :disabled="block" v-model="calendarEvent.start" format="DD/MM/YYYY" placeholder="Data" :first-day-of-week="1" lang="pt"></date-picker>
+                </div>
+                
+                <div class="col-lg-3">
+                  <input
+                    :disabled="block"
+                    id=""
+                    v-model="calendarEvent.title"
+                    placeholder="Titulo do Evento"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+
+                <div class="col-lg-3">
+                  <select class="form-control" v-model="calendarEvent.className" >
+                    <option value="">Selecione a categoria...</option>
+                    <option v-for='(category, idx) in categories' :value="category.value" :key='idx'>
+                      {{category.name}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-lg-1">
+                 <b-button variant="outline-danger" :disabled="block" class="btn btn-rounded" @click="rmvCalendarEvent(idx)">
+                    <i class="bx bxs-trash"></i>
+                  </b-button>
+                </div>
+              </div> 
+
             </form>
             <div class="row justify-content-end">
               <div class="col-lg-10">
