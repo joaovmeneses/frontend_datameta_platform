@@ -15,6 +15,8 @@ import appConfig from "@/app.config";
 
 import { categories } from "./data-calendar";
 
+import { mapGetters } from "vuex"
+
 /**
  * Calendar component
  */
@@ -28,6 +30,9 @@ export default {
     Layout,
     PageHeader,
   },
+  computed: {
+    ...mapGetters(['EVENTS'])
+  },
   data() {
     return {
       title: "Calendar",
@@ -40,8 +45,9 @@ export default {
           active: true,
         },
       ],
-      calendarEvents: [],
+      calendarEvents: this.EVENTS,
       calendarOptions: {
+        events: this.EVENTS,
         headerToolbar: {
           left: "prev,next today",
           center: "title",
@@ -56,7 +62,7 @@ export default {
         ],
         initialView: "dayGridMonth",
         themeSystem: "bootstrap",
-        initialEvents: [],
+        initialEvents: this.EVENTS,
         editable: true,
         droppable: true,
         eventResizableFromStart: true,
@@ -94,26 +100,32 @@ export default {
     },
   },
   mounted() {
-    const vm = this
     this.$http.get('search/' + this.$route.params.id + '/calendarEvent', {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}})
-    .then((data) => {
-       for (let i = 0; i < data.data.length; i++) {
-        const element = data.data[i]
-
-        let calendarApi = this.newEventData.view.calendar;
-        this.currentEvents = calendarApi.addEvent({
-          id: element.id,
-          title: element.id,
-          start: new Date(element.start),
-          end: new Date(element.start),
-          classNames: element.className,
-        });
-      }
-        // eslint-disable-next-line no-console
-      console.log(vm.calendarEvents)
+    .then(() => {
+       
     })
   },
   methods: {
+    handleSelect(arg) {
+      this.$store.commit("ADD_EVENT", {
+          id: (new Date()).getTime(),
+          title: "Something",
+          start: arg.start,
+          end: arg.end,
+          allDay: arg.allDay
+      })
+    },
+    test() {
+      this.$store.commit("ADD_EVENT", {
+        id: 5,
+        title: 'Buy a Theme',
+        start: new Date().setDate(new Date().getDate() + 2),
+        end: new Date().setDate(new Date().getDate() + 2),
+        allDay: true
+      })
+      // eslint-disable-next-line no-console
+      console.log(this.EVENTS)
+    },
     /**
      * Modal form submit
      */
@@ -177,7 +189,18 @@ export default {
      */
     dateClicked(info) {
       this.newEventData = info;
-      this.showModal = true;
+      let calendarApi = info.view.calendar;
+      alert(typeof info);
+      this.currentEvents = calendarApi.addEvent({
+        id: info.length + 1,
+        title: "test",
+        start: info.date,
+        end: info.date,
+        classNames: ['bg-success text-white'],
+      });
+      // eslint-disable-next-line no-console
+      console.log(info)
+      //this.showModal = true;
     },
     /**
      * Modal open for edit event
@@ -241,9 +264,13 @@ export default {
         <div class="card">
           <div class="card-body">
             <div class="app-calendar">
+              <b-button @click="test()">
+                £
+              </b-button>
               <FullCalendar
                 ref="fullCalendar"
                 :options="calendarOptions"
+                @select="handleSelect"
               ></FullCalendar>
             </div>
           </div>

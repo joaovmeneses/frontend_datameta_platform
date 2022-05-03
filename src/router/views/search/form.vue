@@ -60,12 +60,12 @@ export default {
         methodology: '',
         searchType: '',
         registred: false,
-        city: '',
+        city: [],
         state: '0',
         startDate: '',
         endDate: '',
         questionsId: null,
-        maps: [
+        /*maps: [
           {
             link: "",
             title: ""
@@ -77,7 +77,7 @@ export default {
             start: "",
             className: "",
           },
-        ],
+        ],*/
       },
       file: {
         searchId: '',
@@ -117,8 +117,13 @@ export default {
       const vm = this
       axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + this.search.state + '/municipios')
       .then((res) => {
-        vm.cities = res.data
-        vm.search.city ='0'
+        res.data.forEach(element => {
+          vm.cities.push({
+            value: element.nome,
+            text: element.nome
+          })
+        });
+        vm.search.city =''
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
@@ -132,11 +137,6 @@ export default {
       } else {
         return element
       }
-    },
-    setDescription(description) {
-      this.search.description = description
-      // eslint-disable-next-line no-console
-      console.log(this.search)
     },
     async adjustDate(date) {
       return `${this.addZeroIfNeed(await date.getDate())}/${this.addZeroIfNeed(await date.getMonth() + 1)}/${await date.getFullYear()}`
@@ -155,6 +155,11 @@ export default {
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
         }
+      }).catch((err) => {
+        vm.loading = false
+        // eslint-disable-next-line no-console
+        console.log(err)
+        alert("Houve um erro ao tentar criar a pesquisa!")
       })
     },
     submitResult() {
@@ -233,17 +238,13 @@ export default {
                   </select>
                 </div>
               </div> 
-              <div class="form-group row mb-4">
+              <div class="form-group row mb-4" v-if="search.state != 0">
                 <label for="projectname" class="col-form-label col-lg-2"
-                  >Cidade</label
+                  >Cidades</label
                 >
-                <div class="col-lg-10">
-                  <select class="form-control" :disabled="block" v-model="search.city" id="">
-                    <option value="0">Selecione...</option>
-                    <option v-for="city in cities" :key="city.id" :value="city.nome">
-                      {{city.nome}}
-                    </option>
-                  </select>
+                <div class="col-lg-10" style="margin-bottom:8%">
+                  <b-form-select v-model="search.city" class="form form-control" :options="cities" multiple style="height:150%"></b-form-select>
+                  <div class="mt-3">Selecionados: <strong>{{ search.city }}</strong></div>
                 </div>
               </div> 
               <div class="form-group row mb-4">
@@ -299,63 +300,67 @@ export default {
                   />
                 </div>
               </div> 
-              <hr>
-              <div class="row mb-4">
-                <div class="col-lg-5"></div>
-                <h2 class="col-lg-2">Mapas</h2>
-                <div class="col-lg-4">
-                </div>
-                <div class="col-lg-1">
-                  <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addMap()">
-                    +
-                  </b-button>
-                </div>
-              </div>
-              <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="idx">
-                <label for="projectname" class="col-form-label col-lg-2"
-                  >Informacoes:</label
-                >
-                <div class="col-lg-3">
-                  <input
-                    :disabled="block"
-                    id=""
-                    v-model="map.title"
-                    type="text"
-                    placeholder="Titulo do Mapa"
-                    class="form-control"
-                  />
-                </div>
-                
-                <div class="col-lg-6">
-                  <input
-                    :disabled="block"
-                    id=""
-                    v-model="map.link"
-                    placeholder="Link do Mapa"
-                    type="text"
-                    class="form-control"
-                  />
-                </div>
-                <div class="col-lg-1">
-                 <b-button variant="outline-danger" :disabled="block" class="btn btn-rounded" @click="rmvMap(idx)">
-                    <i class="bx bxs-trash"></i>
-                  </b-button>
-                </div>
-              </div> 
+              <div v-if="search.map">
+  
+                <hr>
 
-              <hr>
-              <div class="row mb-4">
-                <div class="col-lg-5"></div>
-                <h2 class="col-lg-4">Datas no Calendario</h2>
-                <div class="col-lg-2">
+                <div class="row mb-4">
+                  <div class="col-lg-5"></div>
+                  <h2 class="col-lg-2">Mapas</h2>
+                  <div class="col-lg-4">
+                  </div>
+                  <div class="col-lg-1">
+                    <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addMap()"> + </b-button>
+                  </div>
                 </div>
-                <div class="col-lg-1">
-                  <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addCalendarEvent()">
-                    +
-                  </b-button>
-                </div>
+                <div class="form-group row mb-4" v-for="(map, idx) in search.maps" :key="idx">
+                  <label for="projectname" class="col-form-label col-lg-2"
+                    >Informacoes:</label
+                  >
+                  <div class="col-lg-3">
+                    <input
+                      :disabled="block"
+                      id=""
+                      v-model="map.title"
+                      type="text"
+                      placeholder="Titulo do Mapa"
+                      class="form-control"
+                    />
+                  </div>
+                  
+                  <div class="col-lg-6">
+                    <input
+                      :disabled="block"
+                      id=""
+                      v-model="map.link"
+                      placeholder="Link do Mapa"
+                      type="text"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-lg-1">
+                  <b-button variant="outline-danger" :disabled="block" class="btn btn-rounded" @click="rmvMap(idx)">
+                      <i class="bx bxs-trash"></i>
+                    </b-button>
+                  </div>
+                </div> 
               </div>
 
+              <div v-if="search.calendarEvents">
+                <hr>
+                <div class="row mb-4">
+                  <div class="col-lg-5"></div>
+                  <h2 class="col-lg-4">Datas no Calendario</h2>
+                  <div class="col-lg-2">
+                  </div>
+                  <div class="col-lg-1">
+                    <b-button variant="outline-info" class="btn btn-rounded" :disabled="block" style="float:right" @click="addCalendarEvent()">
+                      +
+                    </b-button>
+                  </div>
+                </div>
+
+              </div>
               <div class="form-group row mb-4" v-for="(calendarEvent, idx) in search.calendarEvents" :key="calendarEvent.start">
                 <label for="projectname" class="col-form-label col-lg-2"
                   >Evento:</label
