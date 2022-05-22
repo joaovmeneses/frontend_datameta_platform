@@ -123,21 +123,8 @@ export default {
     };
   },
   methods: {
-    showMore(search, questionsId) {
-      const vm = this
-      this.modalInfo = {...search, questions: []}
-      this.$http.get(`search/${search.id}/questions/${questionsId}`, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('userToken')}}).then((res) => {
-        if(res.data.status === 200 && res.data.body) {
-          vm.modalInfo.questions = res.data.body.questions
-        }
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err)
-      })
-    },
-    pushBi(sufixLink) {
-      this.$router.push(`/bi/${sufixLink}`)
+    pushSearchInfoPage(searchId) {
+      this.$router.push(`search/${searchId}/info`)
     },
     pushCalendar(searchId) {
       this.$router.push(`search/${searchId}/calendar/`)
@@ -240,21 +227,17 @@ export default {
                 <i class="bx bx-calendar me-1"></i>
                 {{ search.startDate }} - {{ search.endDate }}
               </li>
-              |
-                <b-button class="" variant="link" v-b-modal.modal-scrollable @click="showMore(search, search.questionsId)">
+                <b-button style="float:right" variant="link" @click="pushSearchInfoPage(search.id)">
                   <i class="dripicons-information"></i>
                 </b-button>
-              |
-                <b-button v-if="search.BusinessIntelligence" variant="link" v-b-modal.modal-scrollable @click="pushBi(search.BusinessIntelligence.id)">
-                  BI
-                  <i class='dripicons-graph-bar' ></i>
-                </b-button>
-              
-              <template v-if="search.BusinessIntelligence">|</template>
+              <div v-if="search.calendarEvents">
+                <template>|</template>
 
                 <b-button class="" variant="link" v-b-modal.modal-scrollable @click="pushCalendar(search.id)">
                   <i class="dripicons-calendar"></i>
-                </b-button>
+                </b-button>                
+              </div>
+
             </ul>
           </div>
         </div>

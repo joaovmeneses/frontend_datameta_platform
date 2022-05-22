@@ -44,8 +44,8 @@ export default [
     component: () => import('./views/calendar/calendar'),
   },
   {
-    path: '/bi/:id',
-    name: 'bi',
+    path: '/search/:id/info',
+    name: 'searchInfo',
     component: () => import('./views/bi/bi'),
   },
   {

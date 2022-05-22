@@ -123,7 +123,7 @@ export default {
             text: element.nome
           })
         });
-        vm.search.city =''
+        vm.search.city = []
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
@@ -154,6 +154,10 @@ export default {
           vm.block = true
           this.file.show = true
           alert("Agora ja pode enviar o resultado !")
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(this.search)
+          alert(` ${res.data.status} | ${res.data.body}`)
         }
       }).catch((err) => {
         vm.loading = false
@@ -243,7 +247,7 @@ export default {
                   >Cidades</label
                 >
                 <div class="col-lg-10" style="margin-bottom:8%">
-                  <b-form-select v-model="search.city" class="form form-control" :options="cities" multiple style="height:150%"></b-form-select>
+                  <b-form-select v-model="search.city" class="form form-control" :options="cities" multiple  style="height:150%"></b-form-select>
                   <div class="mt-3">Selecionados: <strong>{{ search.city }}</strong></div>
                 </div>
               </div> 
@@ -267,8 +271,8 @@ export default {
                 >
                 <div class="col-lg-10">
                   <select class="form-control" :disabled="block" v-model="search.methodology" id="">
-                    <option v-for="methodology in methodologies" :key="methodology" value="">
-                      {{methodology}}
+                    <option v-for="methodology in methodologies" :key="methodology" :value="methodology">
+                      {{ methodology }}
                     </option>
                   </select>
                 </div>
@@ -280,8 +284,8 @@ export default {
                 >
                 <div class="col-lg-10">
                   <select class="form-control" :disabled="block" v-model="search.searchType" id="">
-                    <option v-for="type in types" :key="type" value="">
-                      {{type}}
+                    <option v-for="type in types" :key="type" :value="type">
+                      {{ type }}
                     </option>
                   </select>
                 </div>
